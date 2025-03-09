@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slips Clothing - Modern Fashion Store</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="bg-gray-900 text-white shadow-md">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-purple-400">Slips Clothing</h1>
+                </div>
+                
+                <!-- Navigation -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#" class="hover:text-purple-400 transition duration-300">Home</a>
+                    <a href="#" class="hover:text-purple-400 transition duration-300">Shop</a>
+                    <a href="#" class="hover:text-purple-400 transition duration-300">Collections</a>
+                    <a href="#" class="hover:text-purple-400 transition duration-300">Sale</a>
+                    <a href="#" class="hover:text-purple-400 transition duration-300">About</a>
+                </nav>
+                
+                <!-- Icons -->
+                <div class="flex items-center space-x-4">
+                    <!-- Search -->
+                    <a href="#" class="hover:text-purple-400 transition duration-300">
+                        <i class="fas fa-search"></i>
+                    </a>
+                    
+                    <!-- AI Styling Button - Small floating popup -->
+                    <div class="relative">
+                        <button id="ai-style-btn" class="bg-purple-600 text-white px-3 py-1 rounded-full text-xs hover:bg-purple-700 transition duration-300 flex items-center">
+                            <i class="fas fa-magic mr-1"></i>
+                            AI Style
+                        </button>
+                    </div>
+                    
+                    <!-- Cart -->
+                    <a href="#" class="hover:text-purple-400 transition duration-300 relative">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="absolute -top-2 -right-2 bg-purple-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">3</span>
+                    </a>
+                    
+                    <!-- User Account -->
+                    <a href="#" id="login-button" class="hover:text-purple-400 transition duration-300">
+                        <i class="fas fa-user"></i>
+                    </a>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden hover:text-purple-400 transition duration-300">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Banner -->
+    <section class="bg-gradient-to-r from-gray-900 to-purple-900 text-white py-16">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-8 md:mb-0">
+                    <h2 class="text-4xl font-bold mb-4">Spring Collection 2025</h2>
+                    <p class="text-lg mb-6">Discover the latest trends and elevate your style with our new arrivals.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="bg-purple-600 text-white px-6 py-3 rounded-lg hover:bg-purple-700 transition duration-300">Shop Now</a>
+                        <a href="#" class="border border-white text-white px-6 py-3 rounded-lg hover:bg-white hover:text-purple-900 transition duration-300">View Lookbook</a>
+                    </div>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="/api/placeholder/600/400" alt="Spring Collection" class="rounded-lg shadow-lg">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Featured Categories -->
+    <section class="py-12 bg-gray-100">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-gray-800 mb-8 text-center">Shop by Category</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <a href="#" class="group">
+                    <div class="relative overflow-hidden rounded-lg shadow-md">
+                        <img src="/api/placeholder/300/320" alt="Women's" class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <h3 class="text-white text-xl font-bold">Women's</h3>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="group">
+                    <div class="relative overflow-hidden rounded-lg shadow-md">
+                        <img src="/api/placeholder/300/320" alt="Men's" class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <h3 class="text-white text-xl font-bold">Men's</h3>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="group">
+                    <div class="relative overflow-hidden rounded-lg shadow-md">
+                        <img src="/api/placeholder/300/320" alt="Accessories" class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <h3 class="text-white text-xl font-bold">Accessories</h3>
+                        </div>
+                    </div>
+                </a>
+                <a href="#" class="group">
+                    <div class="relative overflow-hidden rounded-lg shadow-md">
+                        <img src="/api/placeholder/300/320" alt="Footwear" class="w-full h-64 object-cover group-hover:scale-110 transition duration-500">
+                        <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+                            <h3 class="text-white text-xl font-bold">Footwear</h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Featured Products section and other content remains the same -->
+    
+    <!-- Login/Signup Popup Overlay remains the same -->
+    
+    <!-- AI Styling Chat Popup -->
+    <div id="ai-styling-popup" class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-900 rounded-lg shadow-2xl w-full max-w-md mx-4 overflow-hidden transform scale-95 transition-all duration-300">
+            <div class="p-6">
+                <h2 class="text-2xl font-bold text-white mb-4">AI Personal Stylist</h2>
+                <p class="text-gray-400 mb-6">Tell us about your style preferences and get personalized recommendations!</p>
+                
+                <!-- Chat Interface -->
+                <div id="chat-messages" class="bg-gray-800 rounded-lg p-4 h-64 overflow-y-auto mb-4">
+                    <div class="mb-4">
+                        <div class="flex items-start">
+                            <div class="bg-purple-600 text-white p-3 rounded-lg rounded-tl-none max-w-xs">
+                                Hello! I'm your Slips Clothing AI stylist. How can I help you today?
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Message Input -->
+                <div class="flex">
+                    <input type="text" id="chat-input" placeholder="Type your message..." class="bg-gray-800 border border-gray-700 rounded-l-lg px-4 py-3 text-white focus:outline-none w-full">
+                    <button id="send-message" class="bg-purple-600 text-white px-6 py-3 rounded-r-lg hover:bg-purple-700 transition duration-300">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                
+                <!-- Close Button -->
+                <button id="close-ai-chat" class="absolute top-4 right-4 text-gray-500 hover:text-white transition duration-300">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript for Chat Functionality -->
+    <script>
+        // Wait for the DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const aiStyleBtn = document.getElementById('ai-style-btn');
+            const aiStylingChat = document.getElementById('ai-styling-chat');
+            const aiStylingPopup = document.getElementById('ai-styling-popup');
+            const closeAiChat = document.getElementById('close-ai-chat');
+            const chatMessages = document.getElementById('chat-messages');
+            const chatInput = document.getElementById('chat-input');
+            const sendMessage = document.getElementById('send-message');
+            const loginButton = document.getElementById('login-button');
+            const authPopup = document.getElementById('auth-popup');
+            const closePopup = document.getElementById('close-popup');
+            
+            // AI Responses Database
+            const aiResponses = {
+                greetings: [
+                    "Hello! How can I help with your style today?",
+                    "Hi there! Looking for fashion advice?",
+                    "Welcome to Slips Clothing! What's your style preference?"
+                ],
+                style_questions: [
+                    "What colors do you usually prefer to wear?",
+                    "Do you prefer casual, formal, or something in between?",
+                    "Are there any specific occasions you're shopping for?"
+                ],
+                recommendations: {
+                    casual: "Based on your preferences, I'd recommend our new slim fit jeans paired with our premium cotton t-shirts. They're versatile and perfect for everyday wear!",
+                    formal: "For a more formal look, our tailored blazers and dress shirts would be perfect. We also have a great selection of leather shoes to complete the outfit.",
+                    trendy: "Our latest leather jackets and oversized hoodies are trending right now! They'll give you that modern edge you're looking for."
+                },
+                fallback: [
+                    "I'm not sure I understand. Could you tell me more about your style preferences?",
+                    "Let me help you better. Are you looking for specific clothing items or style advice?",
+                    "I'd love to help with your fashion needs. Could you be a bit more specific?"
+                ]
+            };
+            
+            // Function to get random response from array
+            function getRandomResponse(responseArray) {
+                const randomIndex = Math.floor(Math.random() * responseArray.length);
+                return responseArray[randomIndex];
+            }
+            
+            // Function to analyze user message and get appropriate response
+            function getAiResponse(userMessage) {
+                userMessage = userMessage.toLowerCase();
+                
+                // Check for greetings
+                if (userMessage.match(/hi|hello|hey|greetings/)) {
+                    return getRandomResponse(aiResponses.greetings);
+                }
+                
+                // Check for style related keywords
+                if (userMessage.match(/casual|everyday|comfortable|relaxed/)) {
+                    return aiResponses.recommendations.casual;
+                }
+                
+                if (userMessage.match(/formal|business|professional|office|work/)) {
+                    return aiResponses.recommendations.formal;
+                }
+                
+                if (userMessage.match(/trendy|fashion|latest|cool|modern/)) {
+                    return aiResponses.recommendations.trendy;
+                }
+                
+                // If asking about preferences or style
+                if (userMessage.match(/style|fashion|wear|like|recommend|suggestion|help/)) {
+                    return getRandomResponse(aiResponses.style_questions);
+                }
+                
+                // Fallback response
+                return getRandomResponse(aiResponses.fallback);
+            }
+            
+            // Function to add message to chat
+            function addMessage(message, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'mb-4';
+                
+                const flexDiv = document.createElement('div');
+                flexDiv.className = isUser ? 'flex items-start justify-end' : 'flex items-start';
+                
+                const textDiv = document.createElement('div');
+                textDiv.className = isUser ? 
+                    'bg-purple-500 text-white p-3 rounded-lg rounded-tr-none max-w-xs' : 
+                    'bg-purple-600 text-white p-3 rounded-lg rounded-tl-none max-w-xs';
+                textDiv.textContent = message;
+                
+                flexDiv.appendChild(textDiv);
+                messageDiv.appendChild(flexDiv);
+                chatMessages.appendChild(messageDiv);
+                
+                // Scroll to bottom of chat
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            // Event listener for send button
+            function sendChatMessage() {
+                const message = chatInput.value.trim();
+                if (message) {
+                    // Add user message to chat
+                    addMessage(message, true);
+                    
+                    // Clear input field
+                    chatInput.value = '';
+                    
+                    // Simulate AI thinking with timeout
+                    setTimeout(() => {
+                        const response = getAiResponse(message);
+                        addMessage(response);
+                    }, 500);
+                }
+            }
+            
+            // Open AI Styling popup from header button
+            if (aiStyleBtn) {
+                aiStyleBtn.addEventListener('click', function() {
+                    aiStylingPopup.classList.remove('hidden');
+                    aiStylingPopup.querySelector('.bg-gray-900').classList.remove('scale-95');
+                    aiStylingPopup.querySelector('.bg-gray-900').classList.add('scale-100');
+                });
+            }
+            
+            // Open AI Styling popup from login screen button
+            if (aiStylingChat) {
+                aiStylingChat.addEventListener('click', function() {
+                    authPopup.classList.add('hidden');
+                    aiStylingPopup.classList.remove('hidden');
+                    aiStylingPopup.querySelector('.bg-gray-900').classList.remove('scale-95');
+                    aiStylingPopup.querySelector('.bg-gray-900').classList.add('scale-100');
+                });
+            }
+            
+            // Close AI Styling popup
+            if (closeAiChat) {
+                closeAiChat.addEventListener('click', function() {
+                    aiStylingPopup.classList.add('hidden');
+                });
+            }
+            
+            // Handle send button click
+            if (sendMessage) {
+                sendMessage.addEventListener('click', sendChatMessage);
+            }
+            
+            // Handle enter key in input field
+            if (chatInput) {
+                chatInput.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        sendChatMessage();
+                    }
+                });
+            }
+            
+            // Open login popup
+            if (loginButton) {
+                loginButton.addEventListener('click', function() {
+                    authPopup.classList.remove('hidden');
+                    authPopup.querySelector('.bg-gray-900').classList.remove('scale-95');
+                    authPopup.querySelector('.bg-gray-900').classList.add('scale-100');
+                });
+            }
+            
+            // Close login popup
+            if (closePopup) {
+                closePopup.addEventListener('click', function() {
+                    authPopup.classList.add('hidden');
+                });
+            }
+            
+            // Handle login/signup tabs
+            const loginTab = document.getElementById('login-tab');
+            const signupTab = document.getElementById('signup-tab');
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            
+            if (loginTab && signupTab && loginForm && signupForm) {
+                loginTab.addEventListener('click', function() {
+                    loginTab.classList.add('text-purple-400', 'border-b-2', 'border-purple-500');
+                    signupTab.classList.remove('text-purple-400', 'border-b-2', 'border-purple-500');
+                    signupTab.classList.add('text-gray-400');
+                    loginForm.classList.remove('hidden');
+                    signupForm.classList.add('hidden');
+                });
+                
+                signupTab.addEventListener('click', function() {
+                    signupTab.classList.add('text-purple-400', 'border-b-2', 'border-purple-500');
+                    loginTab.classList.remove('text-purple-400', 'border-b-2', 'border-purple-500');
+                    loginTab.classList.add('text-gray-400');
+                    signupForm.classList.remove('hidden');
+                    loginForm.classList.add('hidden');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
