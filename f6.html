@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SLIPS Clothing - Admin Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        :root {
+            --dark-bg: #121212;
+            --dark-card: #1E1E1E;
+            --dark-hover: #2D2D2D;
+            --accent: #6D28D9; /* Purple as accent color */
+            --accent-hover: #5B21B6;
+            --text-primary: #E5E7EB;
+            --text-secondary: #9CA3AF;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .sidebar {
+            background-color: var(--dark-card);
+            width: 250px;
+            transition: all 0.3s;
+        }
+
+        .sidebar-collapsed {
+            width: 70px;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            color: var(--text-secondary);
+            transition: all 0.3s;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            background-color: var(--dark-hover);
+            color: var(--accent);
+        }
+
+        .sidebar-link i {
+            font-size: 1.25rem;
+            width: 30px;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            transition: all 0.3s;
+        }
+
+        .main-content-expanded {
+            margin-left: 70px;
+        }
+
+        .card {
+            background-color: var(--dark-card);
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .status-badge {
+            padding: 0.2rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-low {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .status-medium {
+            background-color: var(--warning);
+            color: black;
+        }
+
+        .status-high {
+            background-color: var(--success);
+            color: white;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: var(--accent);
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .table-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table th {
+            background-color: var(--dark-hover);
+            padding: 0.75rem;
+            text-align: left;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        table td {
+            padding: 0.75rem;
+            border-top: 1px solid #333;
+        }
+
+        tr:hover {
+            background-color: var(--dark-hover);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #333;
+            border-radius: 0.25rem;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .btn-secondary {
+            background-color: var(--dark-hover);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background-color: #444;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            opacity: 0.9;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--danger);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .product-image-preview {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 0.25rem;
+        }
+
+        /* Color picker */
+        .color-option {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .color-option.selected {
+            border-color: white;
+        }
+
+        /* Custom File Input */
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-container input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background-color: var(--dark-hover);
+            color: var(--text-primary);
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+
+        /* Notifications panel */
+        .notifications-panel {
+            position: fixed;
+            right: -300px;
+            top: 70px;
+            width: 300px;
+            background-color: var(--dark-card);
+            border-radius: 0.5rem 0 0 0.5rem;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s;
+            z-index: 1000;
+            max-height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+
+        .notifications-panel.open {
+            right: 0;
+        }
+
+        .notification-item {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #333;
+        }
+
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+
+        .notification-item.unread {
+            background-color: rgba(109, 40, 217, 0.1);
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1050;
+        }
+
+        .modal-content {
+            background-color: var(--dark-card);
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: var(--accent);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Layout -->
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="sidebar h-screen sticky top-0">
+            <div class="flex items-center justify-between p-4 border-b border-gray-700">
+                <div class="flex items-center">
+                    <div class="text-xl font-bold text-purple-400">SLIPS</div>
+                    <span class="ml-1 text-gray-400">Admin</span>
+                </div>
+                <button id="sidebar-toggle" class="text-gray-400 hover:text-white">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <div class="sidebar-menu py-2">
+                <a href="#" class="sidebar-link active" data-tab="dashboard">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span class="sidebar-text ml-3">Dashboard</span>
+                </a>
+                <a href="#" class="sidebar-link" data-tab="inventory">
+                    <i class="fas fa-boxes"></i>
+                    <span class="sidebar-text ml-3">Inventory</span>
+                </a>
+                <a href="#" class="sidebar-link" data-tab="orders">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="sidebar-text ml-3">Orders</span>
+                </a>
+                <a href="#" class="sidebar-link" data-tab="customers">
+                    <i class="fas fa-users"></i>
+                    <span class="sidebar-text ml-3">Customers</span>
+                </a>
+                <a href="#" class="sidebar-link" data-tab="reports">
+                    <i class="fas fa-chart-bar"></i>
+                    <span class="sidebar-text ml-3">Reports</span>
+                </a>
+                <a href="#" class="sidebar-link" data-tab="marketing">
+                    <i class="fas fa-bullhorn"></i>
+                    <span class="sidebar-text ml-3">Marketing</span>
+                </a>
+                <a href="#" class="sidebar-link" data-tab="settings">
+                    <i class="fas fa-cog"></i>
+                    <span class="sidebar-text ml-3">Settings</span>
+                </a>
+                <a href="#" class="sidebar-link">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span class="sidebar-text ml-3">Logout</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content flex-1">
+            <!-- Top Navbar -->
+            <header class="bg-gray-900 py-4 px-6 flex items-center justify-between shadow-md">
+                <div class="flex items-center">
+                    <button class="text-gray-400 hover:text-white mr-4" id="menu-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <div class="relative">
+                        <input type="text" placeholder="Search..." class="bg-gray-800 text-gray-200 py-2 pl-10 pr-4 rounded-full w-64 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <div class="relative">
+                        <button id="notifications-btn" class="text-gray-400 hover:text-white">
+                            <i class="fas fa-bell text-xl"></i>
+                            <span class="notification-badge">5</span>
+                        </button>
+                    </div>
+                    <div class="relative">
+                        <button class="text-gray-400 hover:text-white">
+                            <i class="fas fa-envelope text-xl"></i>
+                            <span class="notification-badge">3</span>
+                        </button>
+                    </div>
+                    <div class="flex items-center">
+                        <img src="/api/placeholder/40/40" alt="Admin" class="h-8 w-8 rounded-full object-cover">
+                        <div class="ml-2">
+                            <div class="text-sm font-medium">Admin User</div>
+                            <div class="text-xs text-gray-400">Administrator</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Tab Content -->
+            <div class="p-6">
+                <!-- Dashboard Tab -->
+                <div id="dashboard" class="tab-content active">
+                    <h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+                    
+                    <!-- Overview Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                        <div class="card p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-gray-400 text-sm">Total Revenue</p>
+                                    <h3 class="text-2xl font-bold">$42,589.00</h3>
+                                    <p class="text-green-500 text-sm"><i class="fas fa-arrow-up mr-1"></i>12.5% from last month</p>
+                                </div>
+                                <div class="p-3 rounded-full bg-purple-900 text-purple-400">
+                                    <i class="fas fa-dollar-sign text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-gray-400 text-sm">Orders</p>
+                                    <h3 class="text-2xl font-bold">845</h3>
+                                    <p class="text-green-500 text-sm"><i class="fas fa-arrow-up mr-1"></i>5.2% from last month</p>
+                                </div>
+                                <div class="p-3 rounded-full bg-blue-900 text-blue-400">
+                                    <i class="fas fa-shopping-cart text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-gray-400 text-sm">Total Products</p>
+                                    <h3 class="text-2xl font-bold">1,256</h3>
+                                    <p class="text-green-500 text-sm"><i class="fas fa-arrow-up mr-1"></i>3.8% from last month</p>
+                                </div>
+                                <div class="p-3 rounded-full bg-green-900 text-green-400">
+                                    <i class="fas fa-tshirt text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card p-4">
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-gray-400 text-sm">Total Customers</p>
+                                    <h3 class="text-2xl font-bold">3,782</h3>
+                                    <p class="text-green-500 text-sm"><i class="fas fa-arrow-up mr-1"></i>9.3% from last month</p>
+                                </div>
+                                <div class="p-3 rounded-full bg-red-900 text-red-400">
+                                    <i class="fas fa-users text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Charts and Tables -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                        <div class="card p-4">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-medium">Revenue Overview</h3>
+                                <select class="bg-gray-800 text-gray-200 py-1 px-2 rounded text-sm">
+                                    <option>Last 7 Days</option>
+                                    <option>Last 30 Days</option>
+                                    <option>Last 90 Days</option>
+                                    <option>Last Year</option>
+                                </select>
+                            </div>
+                            <div class="h-64">
+                                <canvas id="revenue-chart"></canvas>
+                            </div>
+                        </div>
+                        
+                        <div class="card p-4">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-medium">Top Categories</h3>
+                                <select class="bg-gray-800 text-gray-200 py-1 px-2 rounded text-sm">
+                                    <option>Last 7 Days</option>
+                                    <option>Last 30 Days</option>
+                                    <option>Last 90 Days</option>
+                                    <option>Last Year</option>
+                                </select>
+                            </div>
+                            <div class="h-64">
+                                <canvas id="categories-chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Recent Orders and Low Stock -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="card p-4">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-medium">Recent Orders</h3>
+                                <a href="#" class="text-purple-400 hover:text-purple-300 text-sm">View All</a>
+                            </div>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Customer</th>
+                                            <th>Date</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#ORD-5472</td>
+                                            <td>John Doe</td>
+                                            <td>March 8, 2025</td>
+                                            <td>$245.99</td>
+                                            <td><span class="status-badge bg-yellow-500 text-yellow-900">Processing</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-5471</td>
+                                            <td>Jane Smith</td>
+                                            <td>March 8, 2025</td>
+                                            <td>$189.50</td>
+                                            <td><span class="status-badge bg-green-500 text-green-900">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-5470</td>
+                                            <td>Robert Johnson</td>
+                                            <td>March 7, 2025</td>
+                                            <td>$112.99</td>
+                                            <td><span class="status-badge bg-purple-500 text-purple-900">Shipped</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-5469</td>
+                                            <td>Emily Davis</td>
+                                            <td>March 7, 2025</td>
+                                            <td>$89.99</td>
+                                            <td><span class="status-badge bg-green-500 text-green-900">Completed</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-5468</td>
+                                            <td>Michael Wilson</td>
+                                            <td>March 6, 2025</td>
+                                            <td>$349.99</td>
+                                            <td><span class="status-badge bg-red-500 text-red-900">Cancelled</span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="card p-4">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-medium">Low Stock Items</h3>
+                                <a href="#" class="text-purple-400 hover:text-purple-300 text-sm">View All</a>
+                            </div>
+                            <div class="table-container">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>SKU</th>
+                                            <th>Stock</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="flex items-center">
+                                                <img src="/api/placeholder/50/50" alt="Product" class="w-10 h-10 rounded object-cover mr-2">
+                                                Men's Casual T-Shirt
+                                            </td>
+                                            <td>PRD-1001</td>
+                                            <td>5</td>
+                                            <td><span class="status-badge status-low">Low</span></td>
+                                            <td><button class="btn btn-primary py-1 px-2 text-xs">Restock</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="flex items-center">
+                                                <img src="/api/placeholder/50/50" alt="Product" class="w-10 h-10 rounded object-cover mr-2">
+                                                Women's Summer Dress
+                                            </td>
+                                            <td>PRD-2034</td>
+                                            <td>8</td>
+                                            <td><span class="status-badge status-medium">Medium</span></td>
+                                            <td><button class="btn btn-primary py-1 px-2 text-xs">Restock</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="flex items-center">
+                                                <img src="/api/placeholder/50/50" alt="Product" class="w-10 h-10 rounded object-cover mr-2">
+                                                Leather Belt
+                                            </td>
+                                            <td>PRD-3022</td>
+                                            <td>3</td>
+                                            <td><span class="status-badge status-low">Low</span></td>
+                                            <td><button class="btn btn-primary py-1 px-2 text-xs">Restock</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="flex items-center">
+                                                <img src="/api/placeholder/50/50" alt="Product" class="w-10 h-10 rounded object-cover mr-2">
+                                                Classic Denim Jeans
+                                            </td>
+                                            <td>PRD-1067</td>
+                                            <td>7</td>
+                                            <td><span class="status-badge status-medium">Medium</span></td>
+                                            <td><button class="btn btn-primary py-1 px-2 text-xs">Restock</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="flex items-center">
+                                                <img src="/api/placeholder/50/50" alt="Product" class="w-10 h-10 rounded object-cover mr-2">
+                                                Stylish Sunglasses
+                                            </td>
+                                            <td>PRD-4015</td>
+                                            <td>2</td>
+                                            <td><span class="status-badge status-low">Low</span></td>
+                                            <td><button class="btn btn-primary py-1 px-2 text-xs">Restock</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inventory Tab -->
+                <div id="inventory" class="tab-content">
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-2xl font-bold">Inventory Management</h1>
+                        <button class="btn btn-primary" id="add-product-btn">
+                            <i class="fas fa-plus mr-2"></i>Add New Product
+                        </button>
+                    </div>
+                    
+                    <!-- Inventory Filter and Search -->
+                    <div class="card p-4 mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">Category</label>
+                                <select class="form-input">
+                                    <option value="">All Categories</option>
+                                    <option value="men">Men's Clothing</option>
+                                    <option value="women">Women's Clothing</option>
+                                    <option value="accessories">Accessories</option>
+                                    <option value="footwear">Footwear</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">Stock Status</label>
+                                <select class="form-input">
+                                    <option value="">All Status</option>
+                                    <option value="in_stock">In Stock</option>
+                                    <option value="low_stock">Low Stock</option>
+                                    <option value="out_of_stock">Out of Stock</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">Sort By</label>
+                                <select class="form-input">
+                                    <option value="name_asc">Name: A-Z</option>
+                                    <option value="name_desc">Name: Z-A</option>
+                                    <option value="price_asc">Price: Low to High</option>
+                                    <option value="price_desc">Price: High to Low</option>
+                                    <option value="stock_asc">Stock: Low to High</option>
+                                    <option value="stock_desc">Stock: High to Low</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-400 mb-1">Search</label>
+                                <div class="relative">
+                                    <input type="text" placeholder="Search products..." class="form-input pl-10">
+                                    <i class="fas fa-search absolute left-3 top-2.5 text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Inventory Table -->
+                    <div class="card overflow-hidden">
+                        <div class="table-container">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <input type="checkbox" class="form-checkbox h-4 w-4">
+                                        </th>
+                                        <th>Product</th>
